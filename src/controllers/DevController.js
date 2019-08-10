@@ -2,6 +2,30 @@ const axios = require('axios');
 const Dev = require('../models/Dev');
 
 module.exports = {
+    async index (req, res) {
+        try {
+            const { user } = req.headers;
+
+            const loggedDev = await Dev.findById(user);
+
+            if(!loggedDev)
+                throw res.status(400).json({message: 'user not exists'});
+            
+            const users = await Dev.find({
+                $and: [
+                    { _id: { $ne: user } },
+                    { _id: { $nin: loggedDev.likes } },
+                    { _id: { $nin: loggedDev.dislikes } },
+                ],
+            });
+
+            return res.json(users)
+            
+        } catch (error) {
+            return res.status(400).json(error);
+        }
+    },
+
     async store(req, res) {
         try {
             const { username } = req.body;
@@ -9,7 +33,7 @@ module.exports = {
             const userExists = await Dev.findOne({ user: username });
 
             if(userExists)
-                throw res.json({message: 'user already exist', userExists});
+                throw res.json({message: 'user already exists', userExists});
 
             const response = await axios.get(`https://api.github.com/users/${username}`)
 
@@ -24,7 +48,7 @@ module.exports = {
 
             return res.json(dev);
         } catch (error) {
-            return res.json(error);
+            return res.status(400).json(error);
         }
     }
 };
