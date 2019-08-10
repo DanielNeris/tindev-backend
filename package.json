@@ -1,0 +1,19 @@
+{
+  "name": "tindev-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/DanielNeris/tindev-backend.git",
+  "author": "Daniel de Souza Neris <danielneris01@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.6.9"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}
