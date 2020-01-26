@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -6,12 +7,15 @@ const routes = require('./routes');
 
 const server = express();
 
-mongoose.connect('mongodb://localhost:27017/tindev', {
+mongoose.connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
 });
 
 server.use(cors());
 server.use(express.json());
 server.use(routes);
 
-server.listen(3333);
+server.listen(process.env.PORT || 3333)
